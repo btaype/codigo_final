@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Sistema Gestor de Eventos</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header-container {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            margin-right: 20px;
+            width: 100px;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .terms-and-conditions,
+        .privacy-policy {
+            background-color: #ffffff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .submit-button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .submit-button:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-container">
+        <img src="logo.png" alt="Logo" class="logo" />
+        <div class="header-title">
+            <h1>NexTicket</h1>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="terms-and-conditions">
+            <h2>Términos y Condiciones</h2>
+            <p>Al utilizar NexTicket, usted acepta estos términos y condiciones. NexTicket se reserva el derecho de cambiar estos términos en cualquier momento, por lo que le recomendamos que los revise regularmente.</p>
+            <p>NexTicket proporciona una plataforma para la compra de entradas para diversos eventos. No somos responsables de la organización de los eventos ni de las acciones de los organizadores del evento.</p>
+            <p>Al comprar una entrada a través de NexTicket, usted acepta cumplir con todas las reglas y regulaciones del evento y del lugar del evento.</p>
+        </div>
+
+        <div class="privacy-policy">
+            <h2>Política de Privacidad</h2>
+            <p>NexTicket respeta su privacidad y se compromete a protegerla. Esta política de privacidad explica cómo recopilamos y utilizamos su información personal.</p>
+            <p>Recopilamos información personal cuando compra entradas a través de NexTicket. Esta información incluye su nombre, dirección de correo electrónico y detalles de pago.</p>
+            <p>Utilizamos esta información para procesar su compra, proporcionar asistencia al cliente y enviarle actualizaciones sobre su compra. No compartimos su información personal con terceros sin su consentimiento.</p>
+        </div>
+
+        <div class="button-container">
+            <a href="{{ url_for('registrar') }}" class="submit-button">
+                Cerrar
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

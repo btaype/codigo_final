@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Sistema Gestor de Eventos</title>
+    <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header-container {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            margin-right: 20px;
+            width: 100px;
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right: 110px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin-top: 20px;
+            
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .label-styles {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .checkbox {
+            margin-top: 10px;
+        }
+
+        .label-text {
+            font-size: 14px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submit-button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #444;
+        }
+    </style>
+    <script>
+       
+    </script>
+</head>
+
+<body>
+    <div class="header-container">
+        <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo" class="logo" />
+        <h1 class="header-title">Registro</h1>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <form onsubmit="handleSubmit(event)">
+                <label class="label-styles">
+                    Nombres:
+                    <input
+                        type="text"
+                        placeholder="Nombres"
+                        name="nombres"
+                        class="input"
+                    />
+                </label>
+				<label class="label-styles">
+                    Apellidos:
+                    <input
+                        type="text"
+                        placeholder="Apellidos"
+                        name="apellidos"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Correo Electrónico:
+                    <input
+                        type="text"
+                        placeholder="Correo electrónico"
+                        name="email"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Confirmar Correo Electrónico:
+                    <input
+                        type="text"
+                        placeholder="Confirmar correo electrónico"
+                        name="confirmEmail"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Teléfono:
+                    <input
+                        type="tel"
+                        placeholder="Teléfono"
+                        name="telefono"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Contraseña:
+                    <input
+                        type="password"
+                        placeholder="Contraseña"
+                        name="password"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Confirmar Contraseña:
+                    <input
+                        type="password"
+                        placeholder="Confirmar contraseña"
+                        name="confirmPassword"
+                        class="input"
+                    />
+                </label>
+                <label class="label-styles">
+                    Tipo de Documento de Identidad:
+                    <select
+                        id="documentType"
+                        name="documentType"
+                        onchange="showDocumentNumberField()"
+                        class="input"
+                    >
+                        <option value="">--Seleccione una opción--</option>
+                        <option value="DNI">Documento Nacional de Identidad (DNI)</option>
+                        <option value="pasaporte">Pasaporte</option>
+                        <option value="carnet">Carnet de extranjería</option>
+                    </select>
+                </label>
+                <label class="label-styles" style="display: none;" id="documentNumberLabel"></label>
+                <input
+                    type="text"
+                    style="display: none;"
+                    id="documentNumber"
+                    name="documentNumber"
+                    class="input"
+                />
+                <label class="label-styles">
+                    Sexo:
+                    <select
+                        name="sexo"
+                        class="input"
+                    >
+                        <option value="">--Seleccione una opción--</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                    </select>
+                </label>
+                <label class="label-styles">
+                    Fecha de Nacimiento:
+                    <input
+                        type="date"
+                        name="fechaNacimiento"
+                        class="input"
+                    />
+                </label>
+                <label class="checkbox">
+                    <input
+                        type="checkbox"
+                        name="aceptoTerminos"
+                        class="checkbox"
+                    />
+					<span class="label-text">
+						Declaro que he leído y aceptado los <a href="{{ url_for('terminos') }}" style="color: black; text-decoration: underline;">Términos y Condiciones</a>, así como la <a href="{{ url_for('terminos') }}" style="color: black; text-decoration: underline;">Política de Privacidad</a> de NexTicket.
+					</span>
+				</label>
+				<div><p></p></div>
+                <label class="checkbox">
+                    <input
+                        type="checkbox"
+                        name="aceptoPromociones"
+                        class="checkbox"
+                    />
+                    <span class="label-text">
+                        Autorizo que Nex Ticket pueda enviarme información sobre eventos y promociones.
+                    </span>
+                </label>
+                <div class="button-container">
+                    <button type="submit" class="submit-button">
+                        Registrarse
+                   
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

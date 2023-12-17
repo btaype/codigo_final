@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>nexticket</title>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px;
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right: 110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+
+        .template-slider {
+            display: flex;
+            overflow-x: auto;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .template-slider-container {
+        overflow-x: auto;
+        margin-top: 20px;
+        width: 100%;
+    }
+        .template-slider div {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+           
+            flex: 0 0 auto; /* Asegura que cada cuadrito tenga un tamaño fijo */
+            width: 150px; /* Ajusta el ancho de cada cuadrito de plantilla según sea necesario */
+            height: 100px; /* Ajusta la altura de cada cuadrito de plantilla según sea necesario */
+    
+
+        }
+        .lantillaSeleccionada{
+            width: 200px
+        }
+
+    
+        
+
+        .activity-list div {
+            margin-bottom: 10px;
+        }
+        .template-slider-container {
+        overflow-x: auto;
+        margin-top: 20px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .activity-list table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .activity-list th, .activity-list td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .activity-list td.description {
+        max-width: 200px; 
+    }
+    
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+
+        <h1 class="header-title">NEXTICKET</h1>
+    </header>
+    <div class="login-container">
+        <form onsubmit="handleLogin(event);">
+           
+            <label for="eventName">Nombre del Evento:</label>
+            <input
+                type="text"
+                id="eventName"
+                placeholder="Nombre del evento"
+                value="{{resultado["nombre"]}}"
+                oninput="setEventName(event.target.value);"
+            />
+
+            <label for="eventDescription">Descripción del Evento:</label>
+            <textarea
+                id="eventDescription"
+                placeholder="Descripción del evento (máximo 200 letras)"
+                oninput="setEventDescription(event.target.value);"
+                
+            >{{resultado["descripcion"]}}</textarea>
+
+            <label for="startDate">Fecha de inicio, el evento sera visible :</label>
+            <input
+                type="date"
+                id="startDate"
+                oninput="setStartDate(event.target.value);"
+                value="{{resultado["fecha_mostrar_inicio"]}}"
+            />
+
+            <label for="endDate">Fecha de finalizacion, el evento dejará de ser visible: </label>
+            <input
+                type="date"
+                id="endDate"
+                oninput="setEndDate(event.target.value);"
+                value="{{resultado["fecha_mostrar_fin"]}}"
+            />
+
+            <label for="registrationStartDate">Fecha de Inicio del evento:</label>
+            <input
+                type="date"
+                id="registrationStartDate"
+                oninput="setRegistrationStartDate(event.target.value);"
+                value="{{resultado["fecha_inicio_evento"]}}"
+            />
+
+            <label for="registrationEndDate">Fecha de Fin del evento:</label>
+            <input
+                type="date"
+                id="registrationEndDate"
+                oninput="setRegistrationEndDate(event.target.value);"
+                value="{{resultado["fecha_fin_evento"]}}"
+            />
+
+            
+            
+        </form>
+        <button type="button" onclick="agregar_plantilla()">Agregar Plantilla</button>
+        <!-- Mostrador de plantillas -->
+        <div class="template-slider-container">
+            <div class="template-slider" id="templateSlider">
+                <!-- Plantillas se agregarán aquí dinámicamente -->
+            </div>
+        </div>
+        <div id="plantilla_unica"> 
+
+        </div>
+        <div class="login-container">
+        <label for="plantillaSeleccionada">Plantilla seleccionada:</label>
+        <input class="pla" type="text" id="plantillaSeleccionada" value="" readonly>
+
+        <label for="plantillaSeleccionada">ID:</label>
+        <input class="pla" type="text" id="plantillaSeleccionada1" value="" readonly>
+        </div>
+        <!-- Botón para agregar una actividad -->
+        <button type="button" onclick="addActivity()">Agregar Actividad</button>
+
+        <!-- Lista de actividades -->
+        <div class="activity-list" id="activityList">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Actividades se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <label for="tipoEvento">Tipo de Evento:</label>
+        <select id="tipoEvento">
+            <option value="inscripciones">Inscripciones</option>
+            <option value="preinscripciones">Preinscripciones</option>
+        </select>
+        
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" accept="image/*">
+            <button type="button" onclick="uploadImage()">Subir</button>
+        </form>
+
+        <button id="bot" type="button" onclick="createEvent()"  style="margin-top: 20px;">Crear Evento</button>
+        
+    </div>
+
+    <script>
+        
+       
+        // Supongamos que tienes una variable en tu script Flask llamada 'plantillas' que contiene el JSON.
+        
+        document.addEventListener("DOMContentLoaded", function () {
+        const templateSlider = document.getElementById('templateSlider');
+        const detallesPlantilla = document.getElementById('plantillaSeleccionada');
+
+        // Realiza una consulta AJAX para obtener las plantillas
+        fetch("/obtener_plantillas")
+            .then(response => response.json())
+            .then(data => {
+                const plantillas = data['plantillas'];
+
+                // Lógica para mostrar plantillas
+                plantillas.forEach(template => {
+                    const templateDiv = document.createElement('div');
+                    templateDiv.innerHTML = `<p>${template.nombre}</p>`;
+                    templateDiv.addEventListener('click', () => selectTemplate(template, detallesPlantilla));
+                    templateSlider.appendChild(templateDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener plantillas:', error);
+            });
+
+        // Resto de tu código JavaScript ...
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        // Realiza una consulta AJAX para obtener las actividades
+        fetch("/obtener_actividades")
+            .then(response => response.json())
+            .then(data => {
+                // Llena la variable 'actividades' con los datos obtenidos
+                const actividades = data['actividades'];
+                
+                // Lógica para mostrar actividades
+                const activityList = document.getElementById('activityList').getElementsByTagName('tbody')[0];
+                actividades.forEach(actividad => {
+                    const row = activityList.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.textContent = actividad.nombre;
+                    cell2.textContent = actividad.descripcion;
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener actividades:', error);
+            });
+
+        
+    });
+
+        function agregar_plantilla() {
+            var eventName = document.getElementById('eventName').value;
+            var eventDescription = document.getElementById('eventDescription').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var registrationStartDate = document.getElementById('registrationStartDate').value;
+            var registrationEndDate = document.getElementById('registrationEndDate').value;
+            var name_plantilla=document.getElementById('plantillaSeleccionada').value;
+            var id_plantilla=document.getElementById('plantillaSeleccionada1').value;
+            
+            const data = {
+            "solicitud":1,
+            "nombre": eventName,
+            "descripcion": eventDescription,
+            "fecha_mostrar_inicio":startDate,
+            "fecha_mostrar_fin":endDate,
+            "fecha_inicio_evento":registrationStartDate,
+            "fecha_fin_evento":registrationEndDate,
+            "nombre_plantilla":name_plantilla,
+            "id_plantilla":id_plantilla
+            };
+
+            fetch("http://localhost:5000/encargadoVista/crearEvento", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                
+        }
+
+        function selectTemplate(template, plantillaSeleccionadaInput) {
+            const plantillaUnicaDiv = document.getElementById('plantilla_unica');
+            plantillaSeleccionadaInput.value = template.nombre;
+            const ddd = document.getElementById('plantillaSeleccionada1');
+
+            ddd.value=template.id_plantilla;
+    // Limpia el contenido actual del div
+    plantillaUnicaDiv.innerHTML = '';
+
+    // Crea elementos para mostrar los datos de la plantilla
+    const nombrePlantilla = document.createElement('p');
+    nombrePlantilla.textContent = 'Nombre de la Plantilla: ' + template.nombre;
+
+    const ingresoLibre = document.createElement('p');
+    ingresoLibre.textContent = 'Ingreso Libre: ' + template.ingreso_libre;
+
+    const turnoPlantilla = document.createElement('p');
+    turnoPlantilla.textContent = 'Turno de la Plantilla: ' + template.turno;
+
+    const categoriaEdad = document.createElement('p');
+    categoriaEdad.textContent = 'Categoría de Edad: ' + template.categoria_edad;
+
+    const permitirInvitaciones = document.createElement('p');
+    permitirInvitaciones.textContent = 'Permitir Invitaciones: ' + template.permitir_invitaciones;
+
+    // Agrega los elementos al div
+    plantillaUnicaDiv.appendChild(nombrePlantilla);
+    plantillaUnicaDiv.appendChild(ingresoLibre);
+    plantillaUnicaDiv.appendChild(turnoPlantilla);
+    plantillaUnicaDiv.appendChild(categoriaEdad);
+    plantillaUnicaDiv.appendChild(permitirInvitaciones);
+
+   
+}
+        
+        // Resto de las funciones y lógica JavaScript según tus indicaciones
+        // ...
+
+        function uploadImage() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            console.log(file)
+            if (!file) {
+                alert('Por favor, selecciona un archivo.');
+                return;
+            }
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch("http://localhost:5000/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                console.log(data);
+
+                
+                if (data.redireccionar) {
+                    
+                    window.location.href = data.redireccionar;
+                } else {
+                    
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    function addActivity(){
+        var eventName = document.getElementById('eventName').value;
+            var eventDescription = document.getElementById('eventDescription').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var registrationStartDate = document.getElementById('registrationStartDate').value;
+            var registrationEndDate = document.getElementById('registrationEndDate').value;
+            var name_plantilla=document.getElementById('plantillaSeleccionada').value;
+            var id_plantilla=document.getElementById('plantillaSeleccionada1').value;
+            
+            const data = {
+            "solicitud":2,
+            "nombre": eventName,
+            "descripcion": eventDescription,
+            "fecha_mostrar_inicio":startDate,
+            "fecha_mostrar_fin":endDate,
+            "fecha_inicio_evento":registrationStartDate,
+            "fecha_fin_evento":registrationEndDate,
+            "nombre_plantilla":name_plantilla,
+            "id_plantilla":id_plantilla
+            };
+
+            fetch("http://localhost:5000/encargadoVista/crearEvento", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });   
+
+    } 
+    </script>
+</body>
+
+</html>

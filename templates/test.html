@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconocimiento de Código QR con Cámara</title>
+</head>
+<body>
+
+<h1>Reconocimiento de Código QR con Cámara</h1>
+
+<video id="video" width="100%" height="auto" autoplay></video>
+<div id="resultado"></div>
+
+<script src="https://cdn.rawgit.com/cozmo/jsQR/master/dist/jsQR.js"></script>
+<script>
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (stream) {
+            var video = document.getElementById('video');
+            video.srcObject = stream;
+            video.play();
+
+            video.addEventListener('canplay', function () {
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                function detectQRCode() {
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    var code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code) {
+                        document.getElementById('resultado').innerText = "Contenido del QR: " + code.data;
+                    }
+
+                    requestAnimationFrame(detectQRCode);
+                }
+
+                detectQRCode();
+            });
+        })
+        .catch(function (error) {
+            console.error('Error al acceder a la cámara:', error);
+        });
+</script>
+
+</body>
+</html>

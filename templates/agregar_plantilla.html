@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>nexticket - Nuevo Registro</title>
+    <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+
+        <h1 class="header-title">NEXTICKET/Agregar Plantilla</h1>
+    </header>
+    <div class="login-container">
+        <form onsubmit="handleRegistro(event);">
+            <label for="nombre">Nombre:</label>
+            <input
+                type="text"
+                id="nombre"
+                placeholder="Nombre"
+                value=""
+                oninput="setNombre(event.target.value);"
+            />
+            
+            <label for="ingreso_libre">Ingreso Libre:</label>
+            <input
+                type="checkbox"
+                id="ingreso_libre"
+                value="1"
+                onclick="setIngresoLibre(event.target.checked);"
+            />
+
+            <label for="turno">Turno:</label>
+            <input
+                type="text"
+                id="turno"
+                placeholder="Turno"
+                value=""
+                oninput="setTurno(event.target.value);"
+            />
+
+            <label for="categoria_edad">Categoría de Edad:</label>
+            <input
+                type="text"
+                id="categoria_edad"
+                placeholder="Categoría de Edad"
+                value=""
+                oninput="setCategoriaEdad(event.target.value);"
+            />
+
+            <label for="permitir_invitaciones">Permitir Invitaciones:</label>
+            <input
+                type="checkbox"
+                id="permitir_invitaciones"
+                value="1"
+                onclick="setPermitirInvitaciones(event.target.checked);"
+            />
+
+            <div style="text-align: center;">
+                <button type="button" onclick="crear_plantilla()">Crearr</button>
+            </div>
+        </form>
+
+    </div>
+</body>
+<script>
+    function crear_plantilla() {
+   
+    var nombre = document.getElementById('nombre').value;
+    var ingresoLibre = document.getElementById('ingreso_libre').checked ? 1 : 0;
+    var turno = document.getElementById('turno').value;
+    var categoriaEdad = document.getElementById('categoria_edad').value;
+    var permitirInvitaciones = document.getElementById('permitir_invitaciones').checked ? 1 : 0;
+
+  
+    var data = {
+        "nombre": nombre,
+        "ingreso_libre": ingresoLibre,
+        "turno": turno,
+        "categoria_edad": categoriaEdad,
+        "permitir_invitaciones": permitirInvitaciones
+    };
+
+   
+
+    fetch("http://localhost:5000/encargadoVista/crearEvento/agregarPlantilla", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+        .then(data => {
+            
+            console.log(data);
+
+           
+            if (data.redireccionar) {
+                
+                window.location.href = data.redireccionar;
+            } else {
+                
+                
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+</script>
+</html>
