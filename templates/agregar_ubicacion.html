@@ -102,31 +102,82 @@
         <h1 class="header-title">NEXTICKET</h1> 
     </header>
     <div class="login-container">
-        <form method="post" action="/api/agregar_ubicacion" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="pais">País:</label>
-                <input type="text" class="form-control" id="pais" name="pais" required>
+        <form onsubmit="handleLogin(event);">
+            <!-- Otros campos existentes -->
+        
+            <label for="pais">País:</label>
+            <input type="text" id="pais" placeholder="País" value="" oninput="setPais(event.target.value);">
+        
+            <label for="departamento">Departamento:</label>
+            <input type="text" id="departamento" placeholder="Departamento" value="" oninput="setDepartamento(event.target.value);">
+        
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" placeholder="Dirección" value="" oninput="setDireccion(event.target.value);">
+        
+            <label for="aforo">Aforo:</label>
+            <input type="number" id="aforo" placeholder="Aforo" value="" oninput="setAforo(event.target.value);">
+        
+            <!-- Otros campos existentes -->
+        
+            <label for="imagen">Seleccionar Imagen:</label>
+            <input type="file" id="imagen" accept="image/*" onchange="previewImage(event)">
+            <img id="imagen-preview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 100%; margin-top: 10px;">
+        
+            <div style="text-align: center;">
+                <button type="button" onclick="enviarFormulario()">Crear</button>
             </div>
-            <div class="form-group">
-                <label for="departamento">Departamento:</label>
-                <input type="text" class="form-control" id="departamento" name="departamento" required>
-            </div>
-            <div class="form-group">
-                <label for="direccion">Dirección:</label>
-                <input type="text" class="form-control" id="direccion" name="direccion" required>
-            </div>
-            <div class="form-group">
-                <label for="aforo">Aforo:</label>
-                <input type="number" class="form-control" id="aforo" name="aforo" required>
-            </div>
-            <div class="form-group">
-                <label for="imagen">Imagen:</label>
-                <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Agregar Ubicación</button>
         </form>
-
         
     </div>
+    <script>
+        function previewImage(event) {
+      
+        }
+    
+        function enviarFormulario() {
+
+            
+            var pais = document.getElementById('pais').value;
+            var departamento = document.getElementById('departamento').value;
+            var direccion = document.getElementById('direccion').value;
+            var aforo = document.getElementById('aforo').value;
+    
+            
+            var imagen = document.getElementById('imagen').files[0];
+    
+          
+            var formData = new FormData();
+            
+            formData.append('pais', pais);
+            formData.append('departamento', departamento);
+            formData.append('direccion', direccion);
+            formData.append('aforo', aforo);
+            formData.append('imagen', imagen);
+    
+           console.log(formData);
+           fetch("http://localhost:5000/agregarUbiacion", {
+            method: "POST",
+            
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            // Manejar la respuesta del servidor
+            console.log(data);
+
+            // Verificar si hay información de redirección en la respuesta
+            if (data.redireccionar) {
+                // Redirigir a la página de inicio de sesión
+                window.location.href = data.redireccionar;
+            } else {
+                // Manejar la respuesta según sea necesario
+                // ...
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        }
+    </script>
 </body>
+
 </html>

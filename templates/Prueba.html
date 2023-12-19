@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas de Eventos</title>
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .navbar input {
+            margin-right: 10px;
+        }
+        #cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 10px;
+        }
+        .card {
+            flex: 0 0 calc(33.3333% - 20px);
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <!-- <div>
+            <img src="image2.jpg" alt="Imagen 1">
+        </div>
+        <input type="search" placeholder="Buscar eventos"> -->
+        <div></div>
+        <div></div>
+        <div>
+            <img src="image3.jpg" alt="Imagen 2">
+            <button>Iniciar sesión</button>
+            <button>Registrarse</button>
+        </div>
+    </div>
+
+<div id="templateSlider"></div>
+<div id="plantillaSeleccionada"></div>
+
+<div id="cards-container"></div>
+
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+    const templateSlider = document.getElementById('templateSlider');
+    const detallesPlantilla = document.getElementById('plantillaSeleccionada');
+    // Simulación de datos JSON (reemplaza esto con tu lógica de solicitud AJAX)
+    const data = {
+        "plantillas": [
+            { "nombre": "Nombre de Evento 1",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+            { "nombre": "Nombre de Evento 2",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+            { "nombre": "Nombre de Evento 3",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+            { "nombre": "Nombre de Evento 4",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+            { "nombre": "Nombre de Evento 5",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+            { "nombre": "Nombre de Evento 6",
+            "ubicacion": "Ubicacion", 
+            "fechaInicio": "Fecha Inicio",
+            "fechaFinal": "Fecha Final",
+            "etiqueta": "etiqueta"},
+        ]
+    };
+
+    const plantillas = data['plantillas'];
+    const container = document.getElementById('cards-container');
+    plantillas.forEach(template => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="algunaImagen.jpg" alt="${template.nombre}"><h2>${template.nombre}</h2>`;
+        card.addEventListener('click', () => console.log(template));
+        container.appendChild(card);
+    });
+});
+</script>
+
+</body>
+</html>

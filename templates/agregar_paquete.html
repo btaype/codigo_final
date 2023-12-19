@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>nexticket</title>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+        .templates-container {
+            margin-top: 20px;
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #select-all {
+            margin-right: 10px;
+        }
+
+        #templates-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        /* Estilo para alinear el label con el checkbox */
+        .template-item label {
+            margin-bottom: 0;
+            margin-left: 5px;
+        }
+        .templates-container {
+            margin-top: 20px;
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #select-all {
+            margin-right: 10px;
+        }
+
+        #templates-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        /* Estilo para invertir posición de checkbox y label */
+        .template-item label {
+            margin-right: 5px;
+        }
+        .save-button {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .save-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+        
+        <h1 class="header-title">NEXTICKET</h1> 
+    </header>
+    <!-- ... (código anterior) ... -->
+
+
+    <!-- ... (código anterior) ... -->
+    
+    <div class="login-container">
+        <form onsubmit="handleLogin(event);">
+            <!-- ... (Código existente) ... -->
+
+            <!-- Nuevo formulario para nombre general, descripción, precio y cantidad -->
+            <label for="general-name">Nombre General:</label>
+            <input
+                type="text"
+                id="general-name"
+                placeholder="Nombre general"
+                value=""
+                oninput="setGeneralName(event.target.value);"
+            />
+
+            <label for="description">Descripción:</label>
+            <input
+                type="text"
+                id="description"
+                placeholder="Descripción"
+                value=""
+                oninput="setDescription(event.target.value);"
+            />
+
+            <label for="price">Precio (float):</label>
+            <input
+                type="number"
+                id="price"
+                placeholder="Precio"
+                step="0.01"
+                value=""
+                oninput="setPrice(parseFloat(event.target.value));"
+            />
+
+            <label for="quantity">Cantidad (int):</label>
+            <input
+                type="number"
+                id="quantity"
+                placeholder="Cantidad"
+                value=""
+                oninput="setQuantity(parseInt(event.target.value));"
+            />
+
+            <!-- Lista de plantillas -->
+            <div class="templates-container">
+                <div class="select-all-container">
+                    <label for="select-all">Seleccionar Todos</label>
+                    <input type="checkbox" id="select-all" onclick="selectAllTemplates()" value="selecciona">
+                    
+                </div>
+                <div id="templates-list">
+                    <!-- Se generará dinámicamente la lista de plantillas aquí -->
+                </div>
+                <div>
+                    <button type="button" onclick="showSelectedTemplates()">Mostrar Seleccionados</button>
+                </div>
+            </div>
+
+            <!-- Formulario dinámico para ingresar nombres y descripciones adicionales -->
+            
+                
+            <div class="extras-form-container">
+                    <h2>Formulario de Nombres y Descripciones Extras</h2>
+                    <div id="extras-list">
+                        <!-- Se generará dinámicamente la lista de formularios aquí -->
+                    </div>
+                    <button type="button" class="add-extra-button" onclick="addExtraForm()">+</button>
+            </div>
+            <button type="button" class="save-button" onclick="saveData()">Guardar</button>
+           
+        </form>
+    </div>
+
+    <!-- ... (código posterior) ... -->
+</body>
+<script>
+    
+
+    // Función para generar dinámicamente la lista de plantillas
+    function generateTemplatesList() {
+        var templatesDiv = document.getElementById("templates-list");
+        fetch("/obtener_actividades")
+        .then(response => response.json())
+        .then(data => {
+            const templatesList = data['actividades'];
+
+            templatesList.forEach(function(template) {
+            var templateDiv = document.createElement("div");
+            templateDiv.classList.add("template-item");
+
+            var templateCheckbox = document.createElement("input");
+            templateCheckbox.type = "checkbox";
+            templateCheckbox.value = template.id_temp;
+
+            var templateLabel = document.createElement("label");
+            templateLabel.appendChild(document.createTextNode(template.nombre));
+            templateDiv.appendChild(templateLabel);
+            templateDiv.appendChild(templateCheckbox);
+            
+
+            templatesDiv.appendChild(templateDiv);
+        });
+        })
+        .catch(error => {
+            console.error('Error al obtener materiales:', error);
+        });
+        
+    }
+
+    // Función para seleccionar/deseleccionar todos los elementos de la lista
+    function selectAllTemplates() {
+        var checkboxes = document.querySelectorAll("#templates-list input[type='checkbox']");
+        var selectAllCheckbox = document.getElementById("select-all");
+        
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    // Función para mostrar en la consola las plantillas seleccionadas
+    function showSelectedTemplates() {
+        var checkboxes = document.querySelectorAll("#templates-list input[type='checkbox']");
+        var selectedTemplates = [];
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                var templateId = parseInt(checkbox.value);
+                var templateName = checkbox.previousElementSibling.textContent;
+                selectedTemplates.push({ id_temp: templateId, nombre: templateName });
+            }
+        });
+
+        console.log("Plantillas Seleccionadas:", selectedTemplates);
+    }
+
+    // Función para agregar un formulario adicional
+    var extrasCounter = 1;
+
+    function addExtraForm() {
+        var extrasList = document.getElementById("extras-list");
+
+        var extraForm = document.createElement("div");
+        extraForm.classList.add("extra-item");
+
+        var nameLabel = document.createElement("label");
+        nameLabel.htmlFor = "extra-name-" + extrasCounter;
+        nameLabel.appendChild(document.createTextNode("Nombre:"));
+
+        var nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.id = "extra-name-" + extrasCounter;
+        nameInput.placeholder = "Nombre";
+
+        var descLabel = document.createElement("label");
+        descLabel.htmlFor = "extra-description-" + extrasCounter;
+        descLabel.appendChild(document.createTextNode("Breve Descripción:"));
+
+        var descInput = document.createElement("input");
+        descInput.type = "text";
+        descInput.id = "extra-description-" + extrasCounter;
+        descInput.placeholder = "Breve Descripción";
+
+        extraForm.appendChild(nameLabel);
+        extraForm.appendChild(nameInput);
+        extraForm.appendChild(descLabel);
+        extraForm.appendChild(descInput);
+
+        extrasList.appendChild(extraForm);
+        extrasCounter++;
+    }
+
+    // Función para guardar todos los datos recopilados
+    function saveData() {
+        var generalName = document.getElementById("general-name").value;
+        var description = document.getElementById("description").value;
+        var price = document.getElementById("price").value;
+        var quantity = document.getElementById("quantity").value;
+
+        var selectedTemplates = getSelectedTemplates();
+        var extraFormsData = getExtraFormsData();
+
+        // Aquí puedes enviar los datos al servidor mediante un fetch
+        // Simplemente imprimo los datos recopilados como ejemplo
+        console.log("Datos Generales:", { generalName, description, price, quantity });
+        console.log("Plantillas Seleccionadas:", selectedTemplates);
+        console.log("Datos de Formularios Extras:", extraFormsData);
+        const data={
+            "nombre_general":generalName,
+            "decripcion":description,
+            "precio":price,
+            "cantidad":quantity,
+            "actividades":selectedTemplates,
+            "extras":extraFormsData
+        }
+        fetch("http://localhost:5000/encargadoVista/crearEvento/agregarPaquete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+    }
+
+    // Función para obtener las plantillas seleccionadas
+    function getSelectedTemplates() {
+        var checkboxes = document.querySelectorAll("#templates-list input[type='checkbox']");
+        var selectedTemplates = [];
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                var templateId = parseInt(checkbox.value);
+                var templateName = checkbox.previousElementSibling.textContent;
+                selectedTemplates.push({ "id_temp": templateId, "nombre": templateName });
+            }
+        });
+
+        return selectedTemplates;
+    }
+
+    // Función para obtener los datos de los formularios extras
+    function getExtraFormsData() {
+        var extraFormsData = [];
+        for (var i = 1; i < extrasCounter; i++) {
+            var extraName = document.getElementById("extra-name-" + i).value;
+            var extraDescription = document.getElementById("extra-description-" + i).value;
+
+            extraFormsData.push({ "nombre": extraName, "descripcion": extraDescription });
+        }
+        return extraFormsData;
+    }
+
+    // Llamada a la función para generar la lista de plantillas al cargar la página
+    window.onload = generateTemplatesList;
+</script>
+</html>
+
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>nexticket</title>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+        .material-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .material-container form {
+            width: 80%;
+            max-width: 400px; /* Ajusta el ancho del formulario según sea necesario */
+        }
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+        
+        <h1 class="header-title">NEXTICKET</h1> 
+    </header>
+    <div class="login-container">
+        <form onsubmit="handleExpositorAdd(event);">
+            <label for="nombre">Nombre del Expositor:</label>
+            <input
+                type="text"
+                id="nombre"
+                placeholder="Nombre del expositor"
+                value=""
+                oninput="setExpositorName(event.target.value);"
+            />
+
+            <label for="apellido">Apellido:</label>
+            <input
+                type="text"
+                id="apellido"
+                placeholder="Apellido del expositor"
+                value=""
+                oninput="setExpositorApellido(event.target.value);"
+            />
+
+            <label for="cargo">Cargo:</label>
+            <input
+                type="text"
+                id="cargo"
+                placeholder="Cargo del expositor"
+                value=""
+                oninput="setExpositorCargo(event.target.value);"
+            />
+
+            <div style="text-align: center;">
+                <button type="button" onclick="handleExpositorAdd()">Agregar Expositor</button>
+            </div>
+        </form>
+
+    </div>
+    <script>
+
+        function handleExpositorAdd(event) {
+            
+            
+        
+            const materialName = document.getElementById("nombre").value;
+            const materialDescription = document.getElementById("apellido").value;
+            const materialQuantity = document.getElementById("cargo").value;
+          
+        
+            const data = {
+               "nombre":materialName,
+               "apellido":materialDescription,
+               "cargo":materialQuantity,
+               
+        
+            };
+                
+            fetch("http://localhost:5000/encargadoVista/crearEvento/agregarActividad/agregarExpositor", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+        
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            
+        
+        
+            
+        }
+            </script>
+</body>
+</html>

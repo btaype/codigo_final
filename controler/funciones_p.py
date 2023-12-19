@@ -5,3 +5,9 @@ def generate_unique_filename(filename):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     unique_id = str(uuid.uuid4().hex)[:6]
     return f"{timestamp}_{unique_id}_{filename}"
+
+def bucaActividadtemp(data,lista):
+    for i in lista:
+        if data==i["id_temp"]:
+            return i["id_actividad"]
+    return 0

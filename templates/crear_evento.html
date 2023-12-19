@@ -229,10 +229,10 @@
         </div>
         <div class="login-container">
         <label for="plantillaSeleccionada">Plantilla seleccionada:</label>
-        <input class="pla" type="text" id="plantillaSeleccionada" value="" readonly>
+        <input class="pla" type="text" id="plantillaSeleccionada" value="{{resultado["nombre_plantilla"]}}" readonly>
 
         <label for="plantillaSeleccionada">ID:</label>
-        <input class="pla" type="text" id="plantillaSeleccionada1" value="" readonly>
+        <input class="pla" type="text" id="plantillaSeleccionada1" value="{{resultado["id_plantilla"]}}" readonly>
         </div>
         <!-- Botón para agregar una actividad -->
         <button type="button" onclick="addActivity()">Agregar Actividad</button>
@@ -256,14 +256,31 @@
             <option value="inscripciones">Inscripciones</option>
             <option value="preinscripciones">Preinscripciones</option>
         </select>
+        <p> </p>
         
         
+        <label for="paquete_seleccionado">Paquetes</label>
+        <div class="activity-list" id="paqutes_list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Actividades se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <button id="ag_paquete" type="button" onclick="agregar_paquete()"  style="margin-top: 20px;">Agregar Paquetes</button>
         <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="fileInput" accept="image/*">
-            <button type="button" onclick="uploadImage()">Subir</button>
+            <label for="imagen">Seleccionar Imagen:</label>
+            <input type="file" id="imagen" accept="image/*" onchange="previewImage(event)">
+            <img id="imagen-preview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 100%; margin-top: 10px;">
+           
         </form>
-
-        <button id="bot" type="button" onclick="createEvent()"  style="margin-top: 20px;">Crear Evento</button>
+        <button id="bot" type="button" onclick="envairevento()" >Crear Evento</button>
         
     </div>
 
@@ -320,7 +337,32 @@
 
         
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        // Realiza una consulta AJAX para obtener las actividades
+        fetch("/obtener_paquetes")
 
+            .then(response => response.json())
+            .then(data => {
+                // Llena la variable 'actividades' con los datos obtenidos
+                const actividades = data['paquetes'];
+                let n=1;
+                // Lógica para mostrar actividades
+                const activityList = document.getElementById('paqutes_list').getElementsByTagName('tbody')[0];
+                actividades.forEach(actividad => {
+                    const row = activityList.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.textContent = n;
+                    cell2.textContent = actividad.nombre_general;
+                    n=n+1;
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener actividades:', error);
+            });
+
+        
+    });
         function agregar_plantilla() {
             var eventName = document.getElementById('eventName').value;
             var eventDescription = document.getElementById('eventDescription').value;
@@ -486,6 +528,104 @@
                 });   
 
     } 
+    function envairevento() {
+    var eventName = document.getElementById('eventName').value;
+    var eventDescription = document.getElementById('eventDescription').value;
+    var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
+    var registrationStartDate = document.getElementById('registrationStartDate').value;
+    var registrationEndDate = document.getElementById('registrationEndDate').value;
+    var name_plantilla = document.getElementById('plantillaSeleccionada').value;
+    var id_plantilla = document.getElementById('plantillaSeleccionada1').value;
+    var selectElement = document.getElementById("tipoEvento");
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var selectedValue = selectedOption.value;
+    var imagen = document.getElementById('imagen').files[0];
+    var formData = new FormData();
+
+    // Corrección del error tipográfico
+    console.log("holaaaa");
+
+    formData.append('nombre', eventName);
+    formData.append('descripcion', eventDescription);
+    formData.append('fecha_mostrar_inicio', startDate);
+    formData.append('fecha_mostrar_fin', endDate);
+    formData.append('fecha_inicio_evento', registrationStartDate);
+    formData.append('fecha_fin_evento', registrationEndDate);
+    formData.append('nombre_plantilla', name_plantilla);
+    formData.append('id_plantilla', id_plantilla);
+    formData.append('estado', selectedValue);
+    formData.append('imagen', imagen);
+    console.log(formData);
+
+    fetch("http://localhost:5000/cargarEventoCompleto", {
+        method: "POST",
+        body: formData
+    }).then(response => response.json())
+    .then(data => {
+        // Manejar la respuesta del servidor
+        console.log(data);
+
+        // Verificar si hay información de redirección en la respuesta
+        if (data.redireccionar) {
+            // Redirigir a la página de inicio de sesión
+            window.location.href = data.redireccionar;
+        } else {
+            // Manejar la respuesta según sea necesario
+            // ...
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+    function agregar_paquete(){
+        var eventName = document.getElementById('eventName').value;
+            var eventDescription = document.getElementById('eventDescription').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var registrationStartDate = document.getElementById('registrationStartDate').value;
+            var registrationEndDate = document.getElementById('registrationEndDate').value;
+            var name_plantilla=document.getElementById('plantillaSeleccionada').value;
+            var id_plantilla=document.getElementById('plantillaSeleccionada1').value;
+            
+            const data = {
+            "solicitud":3,
+            "nombre": eventName,
+            "descripcion": eventDescription,
+            "fecha_mostrar_inicio":startDate,
+            "fecha_mostrar_fin":endDate,
+            "fecha_inicio_evento":registrationStartDate,
+            "fecha_fin_evento":registrationEndDate,
+            "nombre_plantilla":name_plantilla,
+            "id_plantilla":id_plantilla
+            };
+
+            fetch("http://localhost:5000/encargadoVista/crearEvento", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });   
+
+    }
     </script>
 </body>
 
