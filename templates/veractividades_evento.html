@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Evento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+
+        #contenido {
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin-left: 10em;
+            margin-right: 10em;
+            border: 2px solid #ccc;
+        }
+        #evento{
+            text-align: center;
+            margin-top: 10%;
+            margin-left: 20%;
+            margin-right: 20%;
+            margin-bottom: 5%;
+            border: 2px solid black;
+        }
+        #ActividadesT{
+            /* display: flex;
+            justify-content: space-between; */
+            /* display: block; */
+            /* display: flex; */
+            /* flex-wrap: wrap; */
+            display: grid;
+            grid-template-columns: auto auto;
+            /* flex-direction: column; */
+            /* text-align: center; */
+            border: 2px solid black;
+        }
+        #ActividadesT #descripcionC{
+            margin-left: 10em;
+        }
+        #ActividadesT img{
+            width: 200px;
+            /* object-fit: cover; */
+        }
+        #ActividadesT table{
+            /* width: 50%;
+            object-fit: cover; */
+            text-align: center;
+            padding-bottom: 100px;
+            /* color: purple; */
+        }
+        #ActividadesT h3{
+            text-align: center;
+        }
+        #stiloBotones{
+            padding-top: 5em;
+            padding-bottom: 5em;
+
+            margin-left: 15em;
+            display: grid;
+            grid-template-columns: auto auto;
+            /* justify-content: space-between; */
+        }
+        button {
+            width: 200px;
+            height: 50px;
+        }   
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px; /* Ajusta el ancho de la imagen según sea necesario */
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right:110px;
+            text-align: center;
+        }
+        
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+        
+        <h1 class="header-title">NEXTICKET</h1> 
+    </header>
+    <div class="login-container">
+    <div id="contenido">
+        <div id="evento">
+            <h1 id="nombre"></h1>
+            <p id="descripcion"></p>
+            <p><strong>Fecha de Inicio:</strong> <span id="fechaInicio"></span></p>
+            <p><strong>Fecha de Fin:</strong> <span id="fechaFin"></span></p>
+            <img id="imagen" src="" alt="Imagen del Evento">
+        </div>
+
+        <div id="ActividadesT"></div>
+
+        <div id="stiloBotones">
+            <button type="button">Preinscripcion</button>
+            <button type="button">Inscripcion</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+            // Simulación de datos desde un archivo JSON
+    const jsonData = {
+        "nombre": "Evento Ejemplo",
+        "descripcion": "Descripción del evento de ejemplo.",
+        "fechaInicio": "2023-01-01",
+        "fechaFin": "2023-01-05",
+        "imagen": "https://via.placeholder.com/300"
+    };
+
+    // Actualizar el contenido de la página con datos del JSON
+    document.getElementById('nombre').textContent = jsonData.nombre;
+    document.getElementById('descripcion').textContent = jsonData.descripcion;
+    document.getElementById('fechaInicio').textContent = jsonData.fechaInicio;
+    document.getElementById('fechaFin').textContent = jsonData.fechaFin;
+    document.getElementById('imagen').src = jsonData.imagen;
+
+    const jsonAnotherData = {
+        "Actividad":[{
+            "nombre":"NombreEjemplo-1",
+            "descripcion":"Descripcion",
+            "horarioInicio":"Horario de Inicio",
+            "horarioFinal":"Horario de Fin",
+            "imagen1":"https://via.placeholder.com/300",
+            "pais":"pais",
+            "departamento":"Departamento",
+            "direccion":"Direccion",
+            "imagen2":"https://via.placeholder.com/300",
+            "aforo":"Aforo",
+            "expositores":[
+                {
+                    "nombre":["Million tonne punch","Damage resistance","Superhuman reflexes"],
+                    "cargo":[ "Immortality","Heat Immunity","Inferno"]
+                }
+            ]
+        },{
+            "nombre":"NombreEjemplo-2",
+            "descripcion":"Descripcion",
+            "horarioInicio":"Horario de Inicio",
+            "horarioFinal":"Horario de Fin",
+            "imagen1":"https://via.placeholder.com/300",
+            "pais":"pais",
+            "departamento":"Departamento",
+            "direccion":"Direccion",
+            "imagen2":"https://via.placeholder.com/300",
+            "aforo":"Aforo",
+            "expositores":[
+                {
+                    "nombre":["Million tonne punch","Damage resistance","Superhuman reflexes"],
+                    "cargo":[ "Immortality","Heat Immunity","Inferno"]
+                }
+            ]
+        }]
+    }
+        // ... (código JavaScript sin cambios)
+
+        const container = document.getElementById("ActividadesT");
+
+        jsonAnotherData.Actividad.forEach(actividad => {
+            const actividadDiv = document.createElement('div');
+            actividadDiv.className = 'actividad';
+
+            const imgNumerOne = document.createElement('div');
+            imgNumerOne.className = 'imgNumberOne';
+
+            // const nombreLabel = document.createElement('p');
+            // nombreLabel.textContent = 'Nombre:';
+            // // Establecer margen inferior a 0 para quitar el salto de línea
+            // nombreLabel.style.marginBottom = '0';
+            // actividadDiv.appendChild(nombreLabel);
+
+            const nombre = document.createElement('h2');
+            nombre.textContent = actividad.nombre;
+            nombre.id = 'descripcionC';
+            const descripcion = document.createElement('p');
+            descripcion.textContent = actividad.descripcion;
+            descripcion.id = 'descripcionC';
+            const horario_Inicio = document.createElement('p');
+            horario_Inicio.textContent = actividad.horarioInicio;
+            horario_Inicio.id = 'descripcionC';
+
+            const horario_Fin = document.createElement('p');
+            horario_Fin.textContent = actividad.horarioFinal; // Corregido el nombre de la propiedad
+            horario_Fin.id = 'descripcionC';
+
+            const img1 = document.createElement('img');
+            img1.src = actividad.imagen1;
+            imgNumerOne.appendChild(img1);
+
+            const pais = document.createElement('h1');
+            pais.textContent = actividad.pais;
+            pais.id = 'descripcionC';
+
+            const departamento = document.createElement('p');
+            departamento.textContent = actividad.departamento;
+            departamento.id = 'descripcionC';
+
+            const direccion_Act = document.createElement('p');
+            direccion_Act.textContent = actividad.direccion;
+            direccion_Act.id = 'descripcionC';
+
+            const img2 = document.createElement('img');
+            img2.src = actividad.imagen2;
+            imgNumerOne.appendChild(img2);
+
+            const algoNoseQuees = document.createElement('p');
+            algoNoseQuees.textContent = actividad.aforo;
+            algoNoseQuees.id = 'descripcionC';
+
+            const p_expositores = document.createElement('h3');
+            p_expositores.textContent = 'Expositores';
+            p_expositores.id = 'descripcionC';
+
+            const expositores = document.createElement('table');
+
+            // Crear la fila de encabezado (<thead>) con dos celdas de encabezado (<th>)
+            const headerRow = expositores.createTHead().insertRow(0);
+            const thAlgo = document.createElement('th');
+            const thCargo = document.createElement('th');
+            thAlgo.textContent = 'Nombre';  // Puedes personalizar el texto según sea necesario
+            thCargo.textContent = 'Cargo';  // Puedes personalizar el texto según sea necesario
+            headerRow.appendChild(thAlgo);
+            headerRow.appendChild(thCargo);
+
+            // Añadir filas y celdas a la tabla de expositores
+            actividad.expositores.forEach(expositor => {
+                const row = expositores.insertRow();
+                const cellAlgo = row.insertCell(0);
+                const cellCargo = row.insertCell(1);
+
+                cellAlgo.textContent = expositor.nombre.join(', ');
+                cellCargo.textContent = expositor.cargo.join(', ');
+            });
+
+            actividadDiv.appendChild(nombre);
+            actividadDiv.appendChild(descripcion);
+            actividadDiv.appendChild(horario_Inicio);
+            actividadDiv.appendChild(horario_Fin);
+
+            // actividadDiv.appendChild(img1);
+
+            actividadDiv.appendChild(pais);
+            actividadDiv.appendChild(departamento);
+            actividadDiv.appendChild(direccion_Act);
+
+            // actividadDiv.appendChild(img2);
+
+            actividadDiv.appendChild(algoNoseQuees);
+            
+            actividadDiv.appendChild(p_expositores);
+            actividadDiv.appendChild(expositores);
+
+            container.appendChild(actividadDiv);
+
+            container.appendChild(imgNumerOne);
+
+        });
+    </script>
+
+</body>
+</html>

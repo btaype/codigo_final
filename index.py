@@ -6,6 +6,8 @@ from io import BytesIO
 from werkzeug.utils import secure_filename
 from DB.base_datos import db
 from model.evento import ubicaciones,imagen_ubicacion
+from controler.controle_usuairio import controlador_us
+
 import os
 from os import path
 
@@ -13,6 +15,7 @@ from controler.iniciar_seison import inicioSesion
 from controler.inscripcion import GestorPersonas
 from controler.funciones_p import *
 from controler.crear_evento import crear_evento
+from controler.gestion import gestionar
 app = Flask(__name__)
 
 
@@ -32,9 +35,9 @@ def login():
                 print("TURE")
                 return jsonify({'redireccionar': url_for('encargadoVista')})
             elif (sesion_activo.estado and sesion_activo.rol=='usuario'):
-                return render_template('login.html')
+                return jsonify({'redireccionar': url_for('eventos_usuariover')})
             elif (sesion_activo.estado and sesion_activo.rol=='administrador'):
-                return render_template('login.html')
+                return jsonify({'redireccionar': url_for('ventana_adminitrador')})
             else:
                 return render_template('login.html')
         else:
@@ -47,7 +50,7 @@ def login():
 @app.route('/registro', methods=['GET', 'POST'])
 def registrar():
     if request.method == 'POST':
-        data = request.get_json();
+        data = request.get_json()
         print(data)
         return jsonify({'redireccionar': url_for('login')})
     else:
@@ -56,6 +59,40 @@ def registrar():
 @app.route('/terminos')
 def terminos():
     return render_template('terminos.html')
+#todo sobre suarios
+@app.route('/vistausuario', methods=['GET', 'POST'])
+def eventos_usuariover():
+   
+    if request.method == 'POST':
+      
+        pass
+    else:
+        return render_template('ver_evento_completo.html')
+
+
+@app.route('/ver_eventos_q1', methods=['GET', 'POST'])
+def ver_eventos_q1():
+    resultado=crear_evento.obtener_todo_eventos()
+    return resultado
+
+
+@app.route('/ver_eventos_tooso', methods=['GET', 'POST'])
+def ver_eventos_tooso():
+    if request.method == 'POST':
+        data=request.get_json()
+        
+    else:
+        return render_template('ver_evento_completo.html')
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/encargadoVista', methods=['GET', 'POST'])
 def encargadoVista():
@@ -69,6 +106,34 @@ def encargadoVista():
 
     else:
         return render_template('vista_encargado.html')
+
+
+@app.route('/ventana_adminitrador', methods=['GET', 'POST'])
+def ventana_adminitrador():
+    if request.method == 'POST':
+        data = request.get_json()
+        if(data["solicitud"]==1):
+            return jsonify({'redireccionar': url_for('gestionar_rol')})
+        elif(data["solicitud"]==2):
+            return jsonify({'redireccionar': url_for('eliminar_usuario33')})
+    
+    else: return render_template('ventanda_admin.html')
+
+
+
+@app.route('/ventana_admin/gestionar_rol', methods=['GET', 'POST'])
+def gestionar_rol():
+    if(request.method == 'POST'):
+        pass 
+    else :
+        return render_template('cambiar_rol.html')
+
+@app.route('/ventana_admin/eliminar_usuario', methods=['GET', 'POST'])
+def eliminar_usuario33():
+    if(request.method == 'POST'):
+        pass 
+    else:
+        return render_template('elminar_usuario.html')
     
 @app.route('/encargadoVista/crearEvento', methods=['GET', 'POST'])
 def crearEvento():
@@ -226,20 +291,106 @@ def agregarPaquete():
     else:
        return render_template('agregar_paquete.html')
     
+
+
+
+
+
+
+
 @app.route('/encargadoVista/gestionarEevento', methods=['GET', 'POST'])
 def gestionarEevento():
     if request.method == 'POST':
         data=request.get_json()
         crear_evento.actualizar_paquetes(data)
-        return jsonify({'redireccionar': url_for('crearEvento')})
+        return jsonify({'redireccionar': url_for('menu_encargado_gestion')})
     else:
        return render_template('gestion_vistaprincipal.html')
-    
+
+
+
 @app.route('/obtenerEventos_img', methods=['GET', 'POST'])
 def obtenerEventos_img():
     data=crear_evento.evento_imagen()
     return data
+
+@app.route("/obtener_gestion_menu", methods=['GET', 'POST'])
+def obtener_gestion_menu():
+    if request.method == 'POST':
+        data=request.get_json()
+        gestionar.actializar_idvento(data)
+        return jsonify({'redireccionar': url_for('menu_encargado_gestion')})
+    else:
+       return render_template('vista_encargado.html')
     
+
+        
+@app.route('/encargadoVista/gestionarEevento/menu', methods=['GET', 'POST'])
+def menu_encargado_gestion():
+    
+    if request.method == 'POST':
+        data=request.get_json()
+        if(data["solicitud"]==1):
+            return jsonify({'redireccionar': url_for('preinscipcion_inscripcion')})
+        elif(data["solicitud"]==2):
+            return jsonify({'redireccionar': url_for('matrailes_ganancia')})
+       
+        
+    else :
+        return render_template('getionar_costos.html')
+    
+@app.route('/encargadoVista/gestionarEevento/menu/preinscipcion_inscripcion', methods=['GET', 'POST'])
+def preinscipcion_inscripcion():
+    if request.method == 'POST':
+        pass
+        
+    else:
+        return render_template('preinscripcion_inscripcion.html')
+
+@app.route('/encargadoVista/gestionarEevento/menu/matrailes_ganancia', methods=['GET', 'POST'])
+def matrailes_ganancia():
+    if request.method == 'POST':
+        pass
+        
+    else:
+        return render_template('materiales_ventas_et.html')
+
+@app.route('/obtener_inscritos', methods=['GET', 'POST'])
+def obtener_inscritos1():
+    resultado=gestionar.obtener_inscritos3()
+    print (resultado)
+    return resultado
+        
+    
+
+@app.route('/obtener_preinscritos', methods=['GET', 'POST'])
+def obtener_preinscritos1():
+    resultado=gestionar.obtener_preinscritos3()
+    print (resultado)
+
+    return resultado
+
+@app.route('/obtener_materiales_des', methods=['GET', 'POST'])
+def obtener_materiales_des():
+    resultado=gestionar.obtener_materiales()
+    return resultado   
+@app.route('/obtenere_ventas_t', methods=['GET', 'POST'])
+def obtenere_ventas_t():
+    resultado=gestionar.obtener_ingresos()
+    return resultado  
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     
     app.run(debug=True)

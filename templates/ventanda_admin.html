@@ -23,49 +23,6 @@
             justify-content: space-between;
         }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #f8f9fa;
-        }
-        .navbar input {
-            margin-right: 10px;
-        }
-        #cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 10px;
-        }
-        .card {
-            flex: 0 0 calc(33.3333% - 20px);
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-        img {
-            width: 100%;
-            height: auto;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #333;
-            padding: 10px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
         .logo-container {
             display: flex;
             align-items: center;
@@ -79,7 +36,7 @@
         .header-title {
             margin: 0;
             flex-grow: 1;
-            margin-right:110px;
+            margin-right: 110px;
             text-align: center;
         }
 
@@ -93,22 +50,6 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-       
-        label {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
 
         button {
             background-color: #575960;
@@ -118,6 +59,7 @@
             border-radius: 5px;
             border: none;
             cursor: pointer;
+            margin-bottom: 15px;
         }
 
         button:hover {
@@ -145,48 +87,16 @@
         <h1 class="header-title">NEXTICKET</h1> 
     </header>
     <div class="login-container">
-        <div id="templateSlider"></div>
-        <div id="plantillaSeleccionada"></div>
+        <button type="button" onclick="handleGestionarRoles()">Gestionar Roles</button>
+        <button type="button" onclick="handleEliminarUsuario()">Eliminar Usuario</button>
 
-        <div id="cards-container"></div>
-    
+        
     </div>
-</body>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const templateSlider = document.getElementById('templateSlider');
-    const detallesPlantilla = document.getElementById('plantillaSeleccionada');
-    
+    <script>
 
-       
-        const container = document.getElementById('cards-container');
-        fetch("/obtenerEventos_img")
-        .then(response => response.json())
-        .then(data => {
-            const eventos_elejidos = data['eventos'];
-            eventos_elejidos.forEach(template => {
-                const card = document.createElement('div');
-                card.className = 'card';
-
-                // Construye la URL completa para la imagen del evento
-                const imageUrl = "{{ url_for('static', filename='imagenEvento/') }}" + template.imagen;
-
-                card.innerHTML = `<img src="${imageUrl}" alt="${template.nombre}"><h2>${template.nombre}</h2>`;
-                card.addEventListener('click', () => pasar_id(template));
-                container.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error('Error al obtener actividades:', error);
-        });
-           
-});
-function pasar_id(template){
-    const data = {
-            "id_evento":template.id_evento
-            };
-
-            fetch("http://localhost:5000/encargadoVista/gestionarEevento", {
+        function handleGestionarRoles() {
+            var data={"solicitud":1}
+            fetch("http://localhost:5000/ventana_adminitrador", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -209,6 +119,34 @@ function pasar_id(template){
                 .catch(error => {
                     console.error('Error:', error);
                 });
-}
-</script>
+        }
+
+        function handleEliminarUsuario() {
+            var data={"solicitud":2}
+            fetch("http://localhost:5000/ventana_adminitrador", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
 </html>

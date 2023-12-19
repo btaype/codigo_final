@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nexticket</title>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px;
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right: 110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            padding: 30px; /* Aumenta el espacio interno */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px; /* Aumenta el espacio superior */
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .delete-user-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .delete-user-form label {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+        <h1 class="header-title">NEXTICKET</h1> 
+    </header>
+
+    <div class="login-container">
+        <div class="delete-user-form">
+            <label for="deleteEmail">Correo Electrónico del Usuario a Eliminar:</label>
+            <input
+                type="text"
+                id="deleteEmail"
+                placeholder="Correo electrónico"
+                value=""
+                oninput="setDeleteEmail(event.target.value);"
+            />
+            <p></p>
+            <button type="button" onclick="handleEliminarUsuario()">Eliminar Usuario</button>
+        </div>
+    </div>
+    <script>
+
+        function andleEliminarUsuario(){
+            var datato=document.getElementById(deleteEmail).value;
+            var data={"email":datato};
+            fetch("http://localhost:5000/ventana_admin/eliminar_usuario", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    console.log(data);
+
+                    // Verificar si hay información de redirección en la respuesta
+                    if (data.redireccionar) {
+                        // Redirigir a la página de inicio de sesión
+                        window.location.href = data.redireccionar;
+                    } else {
+                        // Manejar la respuesta según sea necesario
+                        // ...
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>

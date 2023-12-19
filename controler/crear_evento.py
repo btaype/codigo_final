@@ -243,10 +243,15 @@ class crear_evento:
                 nombre = t["nombre"],
                 descripcion = t["descripcion"],
                 id_paquete = paquete_creado.id_paquete
-
                 )
                 db.session.add(extras_cre)
                 db.session.commit()
+        has= personas_has_eventos(
+            id_persona =sesion_activo.id_persona,
+            id_evento =evento_creado.id_evento 
+        )
+        db.session.add(has)
+        db.session.commit()
         return True
     
     @staticmethod 
@@ -270,5 +275,42 @@ class crear_evento:
                     "id_evento":imagen_evento.id_evento
                 })
         return {'eventos': data}
+    @staticmethod 
+    def obtener_todo_eventos():
+        lista=[]
+       
+        sesion=db.get_session()
+        eventospp=sesion.query(eventos).all()
+        for i in eventospp:
+            imagen=sesion.query(images_evento).filter_by(id_evento=i.id_evento).first()
+            lista.append(
+                {
+                "id_evento":i.id_evento,
+                "nombre":i.nombre,
+                "imagen":imagen.imagen
+                }
+
+            )
+        return {"eventos":lista } 
     
-        
+    @staticmethod
+    def eliminarusuario(data):
+        try:
+            persona = db.session.query(personas).filter_by(email=data["email"]).first()
+            if(persona):
+                persona.estado = 0
+                db.session.commit()
+                return True
+            return False
+        except:
+            return False
+    @staticmethod
+    def cambiar_rol(data):
+        try:
+            persona = db.session.query(personas).filter_by(email=data["email"]).first()
+            if(persona):
+                persona.rol=data["rol"]
+                return True
+            return False
+        except:
+            return False

@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
        
         const container = document.getElementById('cards-container');
-        fetch("/obtenerEventos_img")
+        fetch("/ver_eventos_tooso")
         .then(response => response.json())
         .then(data => {
             const eventos_elejidos = data['eventos'];
@@ -186,7 +186,7 @@ function pasar_id(template){
             "id_evento":template.id_evento
             };
 
-            fetch("http://localhost:5000/encargadoVista/gestionarEevento", {
+            fetch("http://localhost:5000/ver_eventos_q", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

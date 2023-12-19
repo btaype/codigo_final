@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey,LargeBinary,Date,DateTime,Float
 from sqlalchemy.orm import relationship
 from DB.base_datos import db
-from model.personas import personas
+
 
 class personas(db.Base):
     __tablename__ = 'personas'
@@ -25,15 +25,15 @@ class inscripcion(db.Base):
     nombre_apellido = Column(String(100))
     qr = Column(String(100))
     tipo_documento = Column(String(15))
-    numero_documento = Column(String(15))
+    numero_docuemnto = Column(String(15))
 
-    id_persona = Column(Integer, ForeignKey('persona.id_persona'))
+    id_persona = Column(Integer, ForeignKey('personas.id_persona'))
     persona = relationship('personas')
 
-    evento_id = Column(Integer, ForeignKey('evento.id_evento'))
+    evento_id = Column(Integer, ForeignKey('eventos.id_evento'))
     evento = relationship('eventos')
 
-    id_paquete = Column(Integer, ForeignKey('paquete.id_paquete'))
+    id_paquete = Column(Integer, ForeignKey('paquetes.id_paquete'))
     paquete = relationship('paquetes')
 
 class preinscripcion(db.Base):
@@ -46,11 +46,12 @@ class preinscripcion(db.Base):
     tipo_documento = Column(String(15))
     numero_documento = Column(String(15))
 
-    id_persona = Column(Integer, ForeignKey('persona.id_persona'))
+    id_persona = Column(Integer, ForeignKey('personas.id_persona'))
     persona = relationship('personas')
 
     id_evento = Column(Integer, ForeignKey('eventos.id_evento'))
     evento = relationship('eventos')
+
 class boleta(db.Base):
     __tablename__ = 'boleta'
 
@@ -58,6 +59,6 @@ class boleta(db.Base):
     monto_total = Column(String(45))
     fecha = Column(DateTime)
 
-    # Relaciones
-    id_preinscripcion = Column(Integer, ForeignKey('preinscripcion.id_preinscripcion'))
-    preinscripcion = relationship('preinscripcion')
+    
+    id_preinscripcion = Column(Integer, ForeignKey('inscripcion.id_inscripcion'))
+    preinscripcion = relationship('inscripcion')

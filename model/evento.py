@@ -128,6 +128,26 @@ class personas_has_eventos(db.Base):
     id_persona = Column(Integer, ForeignKey('personas.id_persona'), primary_key=True)
     id_evento = Column(Integer, ForeignKey('eventos.id_evento'), primary_key=True)
 
-    # Relaciones
+    
     persona = relationship('personas')
     evento = relationship('eventos')
+
+class egresos(db.Base):
+    __tablename__ = 'egresos'
+    id_egresos = Column(Integer, primary_key=True, autoincrement=True)
+    nombre_general = Column(String(80))
+    total_gasto = Column(Float)
+
+    evento_id = Column(Integer, ForeignKey('eventos.id_evento'))
+    evento = relationship('eventos')
+    
+class egresos_debil(db.Base):
+    __tablename__ = 'egresos_debil'
+
+    nombre = Column(String(80))
+    cantidad = Column(Float)
+    subtotal = Column(Float)
+    id_egresos = Column(Integer, ForeignKey('egresos.id_egresos'), primary_key=True)
+
+    # Relaciones
+    egreso = relationship('egresos')

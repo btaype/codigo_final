@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>nexticket</title>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            margin-right: 20px;
+            width: 100px;
+        }
+
+        .header-title {
+            margin: 0;
+            flex-grow: 1;
+            margin-right: 110px;
+            text-align: center;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #575960;
+            text-decoration: none;
+        }
+
+        .ubicacion-slider {
+            display: flex;
+            overflow-x: auto;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .ubicacion-slider-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .ubicacion-slider div {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            flex: 0 0 auto; /* Asegura que cada cuadrito tenga un tamaño fijo */
+            width: 150px; /* Ajusta el ancho de cada cuadrito de plantilla según sea necesario */
+            
+            text-align: center;
+        }
+
+        .ubicacion-slider img {
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto; /* Centra la imagen */
+            display: block;
+        }
+        
+         
+        .lantillaSeleccionada {
+            width: 200px;
+        }
+
+        .activity-list div {
+            margin-bottom: 10px;
+        }
+
+        .template-slider-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .activity-list table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .activity-list th,
+        .activity-list td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-list td.description {
+            max-width: 200px;
+        }
+        table {
+            width: 70%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #575960;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename ='imagenes/logo.png') }}" alt="Logo">
+        </div>
+
+        <h1 class="header-title">NEXTICKET</h1>
+    </header>
+    <div class="login-container">
+        
+
+    
+        <h2>Lista de Inscritos</h2>
+        <table id="listaMateriales">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Docuemnto</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        
+       
+        <h2>Lista de Preinscritos</h2>
+    <table id="listaExpositores">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Docuemnto</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+        </tbody>
+    </table>
+   
+       
+    </div>
+    <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+    
+    fetch("/obtener_inscritos")
+        .then(response => response.json())
+        .then(data => {
+            const materiales = data['inscripcion'];
+            const listaMateriales = document.getElementById('listaMateriales').getElementsByTagName('tbody')[0];
+            
+            materiales.forEach(material => {
+                const row = listaMateriales.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                cell1.textContent = material.nombre;
+                cell2.textContent = material.documento;
+                cell3.textContent = material.email;
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener materiales:', error);
+        });
+
+        fetch("/obtener_preinscritos")
+        .then(response => response.json())
+        .then(data => {
+            const expositores = data['preinscripcion'];
+            const listaExpositores = document.getElementById('listaExpositores').getElementsByTagName('tbody')[0];
+
+            expositores.forEach(expositor => {
+                const row = listaExpositores.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                cell1.textContent = expositor.nombre;
+                cell2.textContent = expositor.documento;
+                cell3.textContent = expositor.email;
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener expositores:', error);
+        });
+
+    });
+
+       
+
+    </script>
+</body>
+    
+</html>
